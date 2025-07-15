@@ -2,10 +2,10 @@
 
 This project sets up a self-hosted media automation environment using Docker Compose with the following components:
 
-- **Transmission**: Torrent downloader
-- **Prowlarr**: Indexer manager and proxy
-- **Sonarr**: TV series management and automation
-- **Radarr**: Movie management and automation
+- **[Transmission](https://transmissionbt.com/)** — lightweight BitTorrent client
+- **[Prowlarr](https://github.com/Prowlarr/Prowlarr)** — indexer manager and proxy for torrent indexers
+- **[Sonarr](https://sonarr.tv/)** — TV series management and automated downloading
+- **[Radarr](https://radarr.video/)** — movie management and automated downloading
 
 All services are connected via a custom Docker network for ease of access and internal resolution.
 
