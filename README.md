@@ -1,7 +1,8 @@
 # 🎬 ARR Stack with Transmission, Prowlarr, Sonarr, and Radarr
 
-This project sets up a self-hosted media automation environment using Docker Compose with the following components:
+This project sets up a self-hosted media automation environment using Docker Compose:
 
+Docker Compose contains following components:
 - **[Transmission](https://transmissionbt.com/)** — lightweight BitTorrent client
 - **[Prowlarr](https://github.com/Prowlarr/Prowlarr)** — indexer manager and proxy for torrent indexers
 - **[Sonarr](https://sonarr.tv/)** — TV series management and automated downloading
