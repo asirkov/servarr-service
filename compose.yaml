@@ -1,0 +1,85 @@
+networks:
+
+  servarrnetwork:
+    name: servarrnetwork
+    ipam:
+      config:
+        - subnet: 172.39.0.0/24
+
+services:
+
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ}
+      - USER=${USERNAME}
+      - PASS=${PASSWORD}
+      - /data/downloads/transmission/watch:/watch
+      # - /data/downloads/transmission/torrents:/torrents
+    volumes:
+      - ./transmission:/config
+      - /data:/data
+    ports:
+      - 9091:9091
+      - 51413:51413
+      - 51413:51413/udp
+    restart: unless-stopped
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.2
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    ports:
+      - 9696:9696
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./prowlarr:/config
+    restart: unless-stopped
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.3
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./sonarr:/config
+      - /data:/data
+    ports:
+      - 8989:8989
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.4
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./radarr:/config
+      - /data:/data
+    ports:
+      - 7878:7878
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.5
