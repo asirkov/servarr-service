@@ -26,6 +26,8 @@ services:
     networks:
       servarrnetwork:
         ipv4_address: 172.39.0.2
+    labels:
+      - "com.centurylinklabs.watchtower.scope=servarr-service"
 
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
@@ -41,6 +43,8 @@ services:
     networks:
       servarrnetwork:
         ipv4_address: 172.39.0.3
+    labels:
+      - "com.centurylinklabs.watchtower.scope=servarr-service"
 
   sonarr:
     image: lscr.io/linuxserver/sonarr:latest
@@ -57,6 +61,8 @@ services:
     networks:
       servarrnetwork:
         ipv4_address: 172.39.0.4
+    labels:
+      - "com.centurylinklabs.watchtower.scope=servarr-service"
 
   radarr:
     image: lscr.io/linuxserver/radarr:latest
@@ -73,6 +79,8 @@ services:
     networks:
       servarrnetwork:
         ipv4_address: 172.39.0.5
+    labels:
+      - "com.centurylinklabs.watchtower.scope=servarr-service"
 
   watchtower:
     image: containrrr/watchtower:latest
@@ -82,7 +90,7 @@ services:
     command: >
       --interval 300
       --cleanup
-      transmission prowlarr sonarr radarr
+      --scope servarr-service
     restart: always
     networks:
       servarrnetwork:
