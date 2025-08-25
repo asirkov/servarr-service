@@ -11,16 +11,12 @@ services:
   transmission:
     image: lscr.io/linuxserver/transmission:latest
     container_name: transmission
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=${TZ}
-      - USER=${USERNAME}
-      - PASS=${PASSWORD}
-      - /data/downloads/transmission/watch:/watch
-      # - /data/downloads/transmission/torrents:/torrents
+    env_file:
+      - ./transmission/.env
     volumes:
       - ./transmission:/config
+      - /data/downloads/transmission/watch:/watch
+      - /data/downloads/transmission/torrents:/torrents
       - /data:/data
     ports:
       - 9091:9091
@@ -34,10 +30,8 @@ services:
   prowlarr:
     image: lscr.io/linuxserver/prowlarr:latest
     container_name: prowlarr
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ./prowlarr/.env
     ports:
       - 9696:9696
     volumes:
@@ -52,10 +46,8 @@ services:
     image: lscr.io/linuxserver/sonarr:latest
     container_name: sonarr
     restart: unless-stopped
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ./sonarr/.env
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./sonarr:/config
@@ -70,10 +62,8 @@ services:
     image: lscr.io/linuxserver/radarr:latest
     container_name: radarr
     restart: unless-stopped
-    environment:
-      - PUID=${PUID}
-      - PGID=${PGID}
-      - TZ=${TZ}
+    env_file:
+      - ./radarr/.env
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./radarr:/config
@@ -83,3 +73,17 @@ services:
     networks:
       servarrnetwork:
         ipv4_address: 172.39.0.5
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: servarr-watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: >
+      --interval 300
+      --cleanup
+      transmission prowlarr sonarr radarr
+    restart: always
+    networks:
+      servarrnetwork:
+        ipv4_address: 172.39.0.6
